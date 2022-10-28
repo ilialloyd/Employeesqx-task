@@ -19,12 +19,7 @@ public class EmpController {
 
     @Autowired
     private EmpService empServ;
-   /* @GetMapping("/all")
-    public List<Emp> findAllEmployye(){
-        return empServ.getAllemp();
-    }
-*/
-
+    // fixme affichage au niveau de console pas dans le postman
     @GetMapping("/all")
     public void findAllEmployye1(){
         empServ.readDataAndCreateMap();
