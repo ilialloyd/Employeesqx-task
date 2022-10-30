@@ -20,7 +20,7 @@ public class Dept implements Serializable {
      */
     @Id
     @Column(name = "DEPTNO", nullable = false)
-    private Integer deptno;
+    private int deptno;
 
     /**
      * Name of the current department

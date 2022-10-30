@@ -1,6 +1,8 @@
 package com.mahdi.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,38 +12,34 @@ import java.util.Set;
 
 @Data
 @Entity
-public class Emp implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@NoArgsConstructor
+@AllArgsConstructor
+public class Emp  {
 
     @Id
     @Column(name = "EMPNO", nullable = false)
-    private Integer empno;
+    private int empNo;
 
     @Column(name = "ENAME", nullable = false)
-    private String ename;
+    private String eName;
 
     @Column(name = "JOB", nullable = false)
     private String job;
 
     @Column(name = "MGR")
-    private Integer mgr;
+    private Integer managerId;
 
     @Column(name = "HIREDATE", nullable = false)
-    private Date hiredate;
+    private Date hireDate;
 
     @Column(name = "SAL", nullable = false)
-    private Integer sal;
+    private int sal;
 
     @Column(name = "COMM")
     private Integer comm;
 
     @Column(name = "DEPTNO", nullable = false)
-    private Integer deptno;
-    @Transient
-    /**
-     * list of subs
-     */
-    public List<Emp> subordinates;
+    private int deptNo;
+
 
 }

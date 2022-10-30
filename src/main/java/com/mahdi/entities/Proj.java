@@ -18,10 +18,10 @@ public class Proj implements Serializable {
 
     @Id
     @Column(name = "PROJID", nullable = false)
-    private Integer projid;
+    private int projid;
 
     @Column(name = "EMPNO", nullable = false)
-    private Integer empno;
+    private int empno;
 
     @Column(name = "STARTDATE", nullable = false)
     private Date startdate;

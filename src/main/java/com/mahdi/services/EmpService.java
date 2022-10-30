@@ -4,89 +4,48 @@ import com.mahdi.entities.Emp;
 import com.mahdi.repositories.EmpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
+@Transactional
 public class EmpService implements IEmpServ {
+@Autowired
 
-    @Autowired
-    private EmpRepository empRep;
-    /**
-     * stores (id, employee) pair
-     */
-    private Map<Integer, Emp> employees = new HashMap<>();
-    private Emp root;
-
-    public Emp getRoot() {
-        return root;
+private EmpRepository empRepository;
+    @Override
+    public List<Emp> getEmployees() {
+        return empRepository.findAll();
     }
 
-    public List<Emp> getAllemp(){
-        return empRep.findAll();
+    @Override
+    public List<Emp>  getEmpByManager(Integer managerNo) {
+        List<Emp> list = empRepository.findByManagerId(managerNo);
+        return list;
     }
 
 
-    /**
-     * Read data and build map of employees
-     */
-    public void readDataAndCreateMap()  {
-        List<Emp> allEmployees = new ArrayList();
-        allEmployees= empRep.findAll();
-            for (Emp x:allEmployees) {
-                employees.put(x.getEmpno(),x);
-                if (x.getMgr()==null){
-                    root=x;
-                        }
+
+    @Override
+    public void deleteEmployee(Emp emp) {
+        empRepository.delete(emp);
+    }
+
+    @Override
+    public Emp getEmployeeByEmpNo(int empNo) {
+        Optional<Emp> emp = empRepository.findByEmpNo(empNo);
+
+        if (emp.isPresent()) {
+            return emp.get();
         }
+
+      throw new RuntimeException("Employee id is not found: "+empNo);
+
     }
 
-    /**
-     * Build tree
-     * @param root the employee without a manager in this case the 'king'
-     */
-    public void buildHierarchyTree(Emp root) {
-        Emp employee = root;
-        List<Emp> subs = getSubsById(employee.getEmpno());
-        employee.subordinates = subs;
-        if (subs.size() == 0)
-            return;
-        for (Emp em : subs)
-            buildHierarchyTree(em);
-    }
-
-    /**
-     *
-     * @param managerId
-     * @return retrive subordinates list by given id
-     */
-    private List<Emp> getSubsById(int managerId) {
-        List<Emp> subs = new ArrayList<>();
-        for (Emp em : employees.values()) {
-            if ((em.getMgr() != null) && (em.getMgr() == managerId))
-                subs.add(em);
-        }
-        return subs;
-    }
-
-
-    //Print tree, Recursion, Time O(n), Space O(h)
-
-    /**
-     * print the tree with recursion
-     * @param root
-     * @param level
-     */
-    public void printHierarchyTree(Emp root, int level) {
-        for (int i = 0; i < level; i++)
-            System.out.print("\t");
-        System.out.println(root.getEname());
-
-        List<Emp> subs = root.subordinates;
-        for (Emp em : subs)
-            printHierarchyTree(em, level+1);
+    @Override
+    public Emp saveEmp(Emp emp) {
+        return empRepository.save(emp);
     }
 }
